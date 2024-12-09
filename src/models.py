@@ -1,9 +1,8 @@
-from pydantic import BaseModel
+from sqlalchemy import Column, Integer, String
+from database import Base
 
 
-class Molecule(BaseModel):
-    id: str
-    smiles: str
-
-class UpdateMolecule(BaseModel):
-    smiles: str
+class Molecule(Base):
+    __tablename__ = 'molecules'
+    id = Column(Integer, primary_key=True, index=True)
+    smiles = Column(String, index=True)
