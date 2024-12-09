@@ -75,7 +75,10 @@ def delete_molecule(molecule_id: int, db: SessionLocal = Depends(get_db)):
 
 
 @app.put("/molecules/{molecule_id}")
-def update_molecule(molecule_id: int, molecule: UpdateMolecule, db: SessionLocal = Depends(get_db)):
+def update_molecule(
+        molecule_id: int,
+        molecule: UpdateMolecule,
+        db: SessionLocal = Depends(get_db)):
     db_molecule = db.get(Molecule, molecule_id)
     if not db_molecule:
         raise HTTPException(status_code=404, detail="Molecule not found")
