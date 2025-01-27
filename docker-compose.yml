@@ -19,6 +19,7 @@ services:
       - .src:/src
     environment:
       POSTGRES_HOST: db
+      REDIS_HOST: redis
       SERVER_ID: SERVER-1
     depends_on:
       - db
@@ -30,6 +31,7 @@ services:
       - .src:/src
     environment:
       POSTGRES_HOST: db
+      REDIS_HOST: redis
       SERVER_ID: SERVER-2
     depends_on:
       - db
@@ -39,6 +41,17 @@ services:
     image: redis:latest
     ports:
       - "6379:6379"
+
+  celery_worker:
+    build: ./src
+    command: celery -A celery_worker worker --loglevel=info
+    environment:
+      POSTGRES_HOST: db
+      REDIS_HOST: redis
+    depends_on:
+      - redis
+    volumes:
+      - .:/src
 
   nginx:
     image: nginx:latest

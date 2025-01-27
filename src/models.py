@@ -1,6 +1,6 @@
 import json
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 from database import Base
 
 
@@ -19,3 +19,12 @@ class MoleculeEncoder(json.JSONEncoder):
         if isinstance(obj, Molecule):
             return {'id': obj.id, 'smiles': obj.smiles}
         return json.JSONEncoder.default(self, obj)
+
+
+class TaskResult(Base):
+    __tablename__ = "task_results"
+
+    id = Column(Integer, primary_key=True, index=True)
+    task_id = Column(String, unique=True, index=True)
+    status = Column(String, index=True)
+    result = Column(Text, nullable=True)

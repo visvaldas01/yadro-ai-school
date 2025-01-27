@@ -8,3 +8,4 @@ flake8==7.1.0
 pytest==8.3.4
 psycopg2==2.9.10
 redis==5.2.1
+celery[redis]==5.4.0
