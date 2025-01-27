@@ -1,0 +1,54 @@
+services:
+
+  db:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DRIVER: postgresql
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  web1:
+    build: ./src
+    volumes:
+      - .src:/src
+    environment:
+      POSTGRES_HOST: db
+      SERVER_ID: SERVER-1
+    depends_on:
+      - db
+      - redis
+
+  web2:
+    build: ./src
+    volumes:
+      - .src:/src
+    environment:
+      POSTGRES_HOST: db
+      SERVER_ID: SERVER-2
+    depends_on:
+      - db
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - web1
+      - web2
+
+volumes:
+  db_data:
